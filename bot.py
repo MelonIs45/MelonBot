@@ -7,7 +7,7 @@ client = commands.Bot(command_prefix = '$')
 client.remove_command('help')
 status = ['1', '12', '123', '1234', '12345']
 #add bots to this list if you dont want them to be mentioned by the @someone command
-blacklistIds = ['660236021585412098', '655848795870986321', '235088799074484224', '289066747443675143', '172002275412279296', '560526844705636374', '185013154198061056', '270904126974590976', '159985870458322944', '213466096718708737', '439205512425504771', '155149108183695360', '331546115390570506']
+botIds = ['660236021585412098', '655848795870986321', '235088799074484224', '289066747443675143', '172002275412279296', '560526844705636374', '185013154198061056', '270904126974590976', '159985870458322944', '213466096718708737', '439205512425504771', '155149108183695360', '331546115390570506']
 
 async def change_status():
     await client.wait_until_ready()
@@ -30,7 +30,7 @@ async def help(message):
     embed.title = 'MelonBot Help'
     embed.add_field(name = '$ping', value = 'Returns ping in ms.', inline = False)
     embed.add_field(name = '$avatar <user>', value = 'Shows the requested user their avatar, leave blank for your own.', inline = False)
-    embed.add_field(name = '@someone <message>', value = 'Sends a message to a random person in the server', inline = False)
+    embed.add_field(name = '$someone <message>', value = 'Sends a message to a random person in the server', inline = False)
     embed.add_field(name = '$placeholder', value = 'placeholder', inline = False)
     embed.add_field(name = '$placeholder', value = 'placeholder', inline = False)
     embed.add_field(name = '$placeholder', value = 'placeholder', inline = False)
@@ -53,32 +53,31 @@ async def on_message(message):
         logFull = "{0} | {1} | {2}".format(logTime, logName, logText)
         log.write(logFull+"\n")
 
-    if message.author == client.user:
-        return
-    if message.content.startswith("@someone"):
-        memberList = []
-        for member in message.guild.members:
-            if str(member.id) in blacklistIds:
-                pass
-            else:
-                memberList.append(member.id)
-        memberId = random.choice(memberList)
-        messageList = message.content.split(" ", 1)
-        messageText = messageList[1]
-        memberName = message.author.display_name
-        try:
-            if '"' in messageText:
-                await message.channel.send("Please dont put in quotes as it breaks the bot, try using something else.")
-                return
-            if "'" in messageText:
-                await message.channel.send("Please dont put in quotes as it breaks the bot, try using something else.") 
-                return 
-            msg = '{0} says: <@{1}> {2}'.format(memberName, memberId, messageText)
-            await message.channel.send(msg)
-        except IndexError:
-            await message.channel.send("Please specify text to be said after the user mentioned.")
-
     await client.process_commands(message)
+
+@client.command()
+async def someone(ctx, message):
+    if ctx.author == client.user:
+        return
+    memberList = []
+    for member in ctx.guild.members:
+        if str(member.id) in botIds:
+            pass
+        else:
+            memberList.append(member.id)
+    memberId = random.choice(memberList)
+    memberName = ctx.author.display_name
+    try:
+        if '"' in message:
+            await ctx.channel.send("Please dont put in quotes as it breaks the bot, try using something else.")
+            return
+        if "'" in message:
+            await ctx.channel.send("Please dont put in quotes as it breaks the bot, try using something else.") 
+            return 
+        msg = '{0} says: <@{1}> {2}'.format(memberName, memberId, message)
+        await ctx.channel.send(msg)
+    except IndexError:
+        await ctx.channel.send("Please specify text to be said after the user mentioned.")
 
 @client.command()
 async def bertas(message):

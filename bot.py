@@ -4,8 +4,7 @@ import os
 
 cwd = os.path.dirname(os.path.realpath(__file__))
 config = json.loads(open(cwd + "/config.json", "r").read())
-client = cmds.Bot(command_prefix = '$',  help_command=None)
-
+client = cmds.Bot(command_prefix = config['data']['prefix'],  help_command=None)
 
 @client.event
 async def on_message(message):
@@ -47,7 +46,6 @@ async def help(message):
     embed.add_field(name = '$info (WIP)', value = 'Shows stats about a user', inline = False)
     embed.add_field(name = '$placeholder', value = 'placeholder', inline = False)
     embed.add_field(name = '$placeholder', value = 'placeholder', inline = False)
-
     embed.timestamp = datetime.datetime.utcnow()
     embed.set_footer(text = f"Requested by {message.guild.get_member(message.author.id)}", icon_url = message.guild.get_member(user.id).avatar_url_as(format='png'))
 
@@ -59,7 +57,7 @@ async def someone(ctx, message):
         return
     memberList = []
     for member in ctx.guild.members:
-        if member.bot == True:
+        if member.bot is True:
             pass
         else:
             memberList.append(member.id)
@@ -82,7 +80,7 @@ async def someone(ctx, message):
 async def avatar(ctx, mUser : discord.Member=None):
     if ctx.author == client.user:
         return
-    if mUser == None:
+    if mUser is None:
         mUser = ctx.message.guild.get_member(ctx.message.author.id)
         try:
             uAvatar = mUser.avatar_url_as(format='gif', size=256)
@@ -93,13 +91,7 @@ async def avatar(ctx, mUser : discord.Member=None):
             uAvatar = mUser.avatar_url_as(format='gif', size=256)
         except discord.errors.InvalidArgument:
             uAvatar = mUser.avatar_url_as(format='png', size=256)
-    
-    
-    #roles = mUser.roles
-    #roles = roles.split(", ")
-    #print(roles)
-    #attUrl = attUrl.split(" ")[3]
-    #attUrl = attUrl.lstrip("url='").rstrip("'>'")
+
     user = ctx.message.author
     embed = discord.Embed(color = user.colour)
     embed.set_author(name = mUser)
@@ -115,7 +107,7 @@ async def avatar(ctx, mUser : discord.Member=None):
 async def info(ctx, mUser : discord.Member=None):
     if ctx.author == client.user:
         return
-    if mUser == None:
+    if mUser is None:
         mUser = ctx.message.guild.get_member(ctx.message.author.id)
     user = ctx.message.author
     print(ctx.message.author.roles)

@@ -1,5 +1,10 @@
 {
     "data": {
-      "token": "token here"
+      "token": "token"
+    },
+    "log": {
+      "logGuild": "guild id to log from",
+      "guildId": "guild id to log on",
+      "channelId": "channel id to log on"
     }
 }

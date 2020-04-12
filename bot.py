@@ -35,21 +35,37 @@ async def on_message(message):
     await client.process_commands(message)
 
 @client.command()
-async def help(message):
+async def help(message, command = None):
     user = message.author
+    if command is None:
+        embed = discord.Embed(color = user.colour)
+        embed.title = 'MelonBot Help'
+        embed.add_field(name = '**`$help <command>`**', value = 'Specify a command and it will tell you information on how to properly use it.', inline = False)
+        embed.add_field(name = '**`$ping`**', value = 'Returns ping in ms.', inline = False)
+        embed.add_field(name = '**`$avatar <user>`**', value = 'Shows the requested user their avatar.', inline = False)
+        embed.add_field(name = '**`$someone [message]`**', value = 'Sends a message to a random person in the server.', inline = False)
+        embed.add_field(name = '**`$info <user>`**', value = 'Shows stats about a user.', inline = False)
+        embed.timestamp = datetime.datetime.utcnow()
+        embed.set_footer(text = f"Requested by {message.guild.get_member(message.author.id)}", icon_url = message.guild.get_member(user.id).avatar_url_as(format='png'))
 
-    embed = discord.Embed(color = user.colour)
-    embed.title = 'MelonBot Help'
-    embed.add_field(name = '$ping', value = 'Returns ping in ms.', inline = False)
-    embed.add_field(name = '$avatar <user>', value = 'Shows the requested user their avatar, leave blank for your own.', inline = False)
-    embed.add_field(name = '$someone <message>', value = 'Sends a message to a random person in the server', inline = False)
-    embed.add_field(name = '$info (WIP)', value = 'Shows stats about a user', inline = False)
-    embed.add_field(name = '$placeholder', value = 'placeholder', inline = False)
-    embed.add_field(name = '$placeholder', value = 'placeholder', inline = False)
-    embed.timestamp = datetime.datetime.utcnow()
-    embed.set_footer(text = f"Requested by {message.guild.get_member(message.author.id)}", icon_url = message.guild.get_member(user.id).avatar_url_as(format='png'))
-
-    await message.channel.send(embed = embed) 
+        await message.channel.send(embed = embed) 
+    else:
+        embed = discord.Embed(color = user.color)
+        embed.set_author(name = message.guild.get_member(message.author.id))
+        embed.timestamp = datetime.datetime.utcnow()
+        embed.set_footer(text = f"Requested by {message.guild.get_member(message.author.id)}", icon_url = message.guild.get_member(user.id).avatar_url_as(format='png'))
+        if command == "ping":
+            embed.add_field(name = '**Usage: `$ping`**', value = 'Returns the client latency in milliseconds, no arguments are to be given.')
+        elif command == "avatar":
+            embed.add_field(name = '**Usage: `$avatar <user>`**', value = 'Returns the user specified avatar, the `<user>` argument does not have to be specified and will return with the message authors avatar instead.')
+        elif command == "someone":
+            embed.add_field(name = '**Usage: `$someone [message]`**', value = 'Sends the message specified in the `<message>` argument to a random person in the server, argument of `<message>` has to be given.')
+        elif command == "info":
+            embed.add_field(name = '**Usage: `$info <user>`**', value = 'Returns information about the user specified in the `<user>` argument, an empty `<user>` argument will return the authors information instead.')
+        else:
+            embed.add_field(name = '**Error:**', value = 'Not a vaild command, please refer to the **`$help`** command for guidance.')
+            
+        await message.send(embed = embed) 
 
 @client.command()
 async def someone(ctx, message):
@@ -158,6 +174,13 @@ async def bertas(message):
     embed.set_footer(text = f"Requested by {message.guild.get_member(message.author.id)}", icon_url = message.guild.get_member(user.id).avatar_url_as(format='png'))
 
     await message.channel.send(embed = embed)
+
+@client.command()
+async def purge(message, amount = None):
+    if amount is None:
+        await message.channel.send("Please enter a valid amount")
+    else:
+        await message.channel.send(amount)
 
 @client.event
 async def on_ready():

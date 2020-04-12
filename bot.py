@@ -54,7 +54,9 @@ async def help(message, command = None):
         embed.set_author(name = message.guild.get_member(message.author.id))
         embed.timestamp = datetime.datetime.utcnow()
         embed.set_footer(text = f"Requested by {message.guild.get_member(message.author.id)}", icon_url = message.guild.get_member(user.id).avatar_url_as(format='png'))
-        if command == "ping":
+        if command == "help":
+            embed.add_field(name = '**Usage: `$help`**', value = 'Hmm are you that much of a melon to understand???')
+        elif command == "ping":
             embed.add_field(name = '**Usage: `$ping`**', value = 'Returns the client latency in milliseconds, no arguments are to be given.')
         elif command == "avatar":
             embed.add_field(name = '**Usage: `$avatar <user>`**', value = 'Returns the user specified avatar, the `<user>` argument does not have to be specified and will return with the message authors avatar instead.')

@@ -1,3 +1,4 @@
+
 import discord, random, asyncio, datetime, json
 from discord.ext import commands as cmds
 import os
@@ -16,7 +17,7 @@ async def on_message(message):
             attUrl = attUrl.lstrip("url='").rstrip("'>'")
             logText = "{0} {1}".format(message.content, attUrl)
         else:
-            attUrl = None
+            attUrl = ""
             logText = message.content
         log = open("log.txt", "a")
         logName = message.author.display_name
@@ -45,6 +46,7 @@ async def help(message, command = None):
         embed.add_field(name = '**`$avatar <user>`**', value = 'Shows the requested user their avatar.', inline = False)
         embed.add_field(name = '**`$someone [message]`**', value = 'Sends a message to a random person in the server.', inline = False)
         embed.add_field(name = '**`$info <user>`**', value = 'Shows stats about a user.', inline = False)
+        embed.add_field(name = '**`$purge [amount | Max is 50]`**', value = '**Moderator Command:** Deletes the amount of messages specified.', inline = False)
         embed.timestamp = datetime.datetime.utcnow()
         embed.set_footer(text = f"Requested by {message.guild.get_member(message.author.id)}", icon_url = message.guild.get_member(user.id).avatar_url_as(format='png'))
 
@@ -64,6 +66,8 @@ async def help(message, command = None):
             embed.add_field(name = '**Usage: `$someone [message]`**', value = 'Sends the message specified in the `<message>` argument to a random person in the server, argument of `<message>` has to be given.')
         elif command == "info":
             embed.add_field(name = '**Usage: `$info <user>`**', value = 'Returns information about the user specified in the `<user>` argument, an empty `<user>` argument will return the authors information instead.')
+        elif command == "purge":
+            embed.add_field(name = '**Usage: `$purge [amount | Max is 50]`**', value = 'Deletes the amount of messages specified in the `[amount]` argument, requires the `Manage Messages` permission for the bot.')
         else:
             embed.add_field(name = '**Error:**', value = 'Not a vaild command, please refer to the **`$help`** command for guidance.')
             
@@ -179,10 +183,16 @@ async def bertas(message):
 
 @client.command()
 async def purge(message, amount = None):
-    if amount is None:
-        await message.channel.send("Please enter a valid amount")
-    else:
-        await message.channel.send(amount)
+    mUser = message.guild.get_member(message.author.id)
+    try:
+        if amount is None:
+            await message.channel.send("Please enter a valid amount")
+        elif int(amount) > 50:
+           await message.channel.send("The maximum amount to purge is `50`.")
+        else:
+            await message.channel.purge(limit = int(amount)+1)   
+    except discord.errors.Forbidden:
+        await message.channel.send("Missing `Manage Messages` permission for the bot.")
 
 @client.event
 async def on_ready():

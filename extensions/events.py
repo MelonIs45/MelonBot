@@ -17,8 +17,7 @@ class Events(commands.Cog):
         print("-----------\nBot made by MelonIs45#8078\nReady!")
 
     @commands.Cog.listener()
-    async def on_message(self, ctx):
-        global embed
+    async def on_message(self, ctx, message):
         utils = self.client.get_cog("Utils")
         client = self.client
 
@@ -45,7 +44,7 @@ class Events(commands.Cog):
             embed.description = f"{ctx.content} {attUrl}"
 
             await masterChannelId.send(embed = embed)
-        await client.process_commands(ctx)
+        await client.process_commands(message)
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):

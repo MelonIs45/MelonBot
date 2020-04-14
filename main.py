@@ -19,12 +19,25 @@ async def unload(ctx, extension):
     
 @client.command()
 async def reload(ctx, extension):
-    client.reload_extension(f"extensions.{extension}")
-    await ctx.send(f"Extension: `{extension}` reloaded!")
+    if ctx.message.content.split(" ")[1] == "all":
+        unloadall()
+        loadall()
+        await ctx.send("Reloaded all extensions!")
+    else:
+        client.reload_extension(f"extensions.{extension}")
+        await ctx.send(f"Extension: `{extension}` reloaded!")
 
-for filename in os.listdir(cwd + "/extensions"):
-    if filename.endswith(".py"):
-        client.load_extension(f"extensions.{filename[:-3]}")
-        print(f"Loaded {filename}")
+def loadall():
+    for filename in os.listdir(cwd + "/extensions"):
+        if filename.endswith(".py"):
+            client.load_extension(f"extensions.{filename[:-3]}")
+            print(f"Loaded {filename}")
 
+def unloadall():
+    for filename in os.listdir(cwd + "/extensions"):
+        if filename.endswith(".py"):
+            client.unload_extension(f"extensions.{filename[:-3]}")
+            print(f"Unloaded {filename}")
+
+loadall()
 client.run(config["data"]["token"])

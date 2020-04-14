@@ -14,7 +14,8 @@ class Events(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        print("-----------\nBot made by MelonIs45#8078\nReady!")
+        client = self.client
+        print(f"-----------\nBot made by MelonIs45#8078\nLogged in as: {client.user.name}\nReady!")
 
     @commands.Cog.listener()
     async def on_message(self, message):
@@ -46,12 +47,14 @@ class Events(commands.Cog):
 
             await masterChannelId.send(embed = embed)
 
-    # @commands.Cog.listener()
-    # async def on_command_error(self, ctx, error):
-    #     if isinstance(error, commands.MissingPermissions):
-    #         await ctx.send("Missing `Manage Messages` permission.")
-        
-
+    @commands.Cog.listener()
+    async def on_command_error(self, ctx, error):
+        if isinstance(error, commands.MissingPermissions):
+            await ctx.send("Missing permissions.")
+        elif isinstance(error, commands.NotOwner):
+            await ctx.send("You aren't the bot owner :D")
+        else:
+            print(error)
 
 def setup(client):
     client.add_cog(Events(client))

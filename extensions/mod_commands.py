@@ -24,3 +24,4 @@ class Info_commands(commands.Cog):
 
 def setup(client):
     client.add_cog(Info_commands(client))
+    

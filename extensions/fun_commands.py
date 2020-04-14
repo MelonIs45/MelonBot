@@ -58,15 +58,9 @@ class Fun_commands(commands.Cog):
         memberName = ctx.author.display_name
         msgContent = ctx.message.content.split(" ", 1)
 
-        try:
-            if '"' in msgContent[1] or "'" in msgContent[1]:
-                await ctx.send("Please dont put in quotes as it breaks the bot, try using something else.")
-                return
-            msg = '{0} says: <@{1}> {2}'.format(memberName, memberId, msgContent[1])
-            await ctx.send(msg)
-        except IndexError:
-            await ctx.send("Please specify text to be said after the user mentioned.")
-
+        msg = str(memberName) + ": <@" + str(memberId) + "> " + str(msgContent[1])
+        await ctx.send(msg)
 
 def setup(client):
     client.add_cog(Fun_commands(client))
+    

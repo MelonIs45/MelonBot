@@ -63,7 +63,7 @@ class Info_commands(commands.Cog):
         await ctx.send(embed = embed)  
 
     @commands.command()
-    async def info(self, ctx, member : discord.Member=None):
+    async def info(self, ctx, member : discord.Member = None):
         utils = self.client.get_cog("Utils")
         client = self.client
 
@@ -83,10 +83,10 @@ class Info_commands(commands.Cog):
         url = "https://cdn.discordapp.com/avatars/{0.id}/{0.avatar}.png?size=512".format(member)
 
         embed = discord.Embed(color = ctx.author.colour)
-        utils.create_embed(ctx, embed)
+        utils.create_embed(ctx, embed, member)
+        embed.set_thumbnail(url = url)
         embed.add_field(name = "**ID:**", value = member.id, inline = True)
         embed.add_field(name = "**Nickname:**", value = member.nick, inline = True)
-        embed.set_thumbnail(url = url)
         embed.add_field(name = "**Account Created:**", value = member.created_at.strftime("%A %d %B %Y at %X%p"), inline = False)
         embed.add_field(name = "**Guild Join Date:**", value = member.joined_at.strftime("%A %d %B %Y at %X%p"), inline = False)
         embed.add_field(name = "**Roles:**", value = roleTags, inline = False)
@@ -95,3 +95,4 @@ class Info_commands(commands.Cog):
 
 def setup(client):
     client.add_cog(Info_commands(client))
+    

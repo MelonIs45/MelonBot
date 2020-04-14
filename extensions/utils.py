@@ -12,14 +12,15 @@ class Utils(commands.Cog):
     def __init__(self, client):
         self.client = client
 
-    def create_embed(self, ctx, embed):
-        member = ctx.guild.get_member(ctx.author.id)
+    def create_embed(self, ctx, embed, member : discord.Member = None):
+        if member == None:
+            member = ctx.guild.get_member(ctx.author.id)
+        else:
+            pass
         embed.set_author(name = member)
         embed.set_footer(text = f"Requested by {member}", icon_url = member.avatar_url_as(format='png'))
         embed.timestamp = datetime.datetime.utcnow()
 
-        #return embed
-
-
 def setup(client):
     client.add_cog(Utils(client))
+    

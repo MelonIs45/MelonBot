@@ -21,7 +21,7 @@ class Info_commands(commands.Cog):
         utils = self.client.get_cog("Utils")
         member = ctx.guild.get_member(ctx.author.id)
         if r_command is None:
-            embed = discord.Embed(color = ctx.author.colour)
+            embed = discord.Embed()
             utils.get_member(ctx, member)
             utils.create_embed(ctx, embed, member)
             embed.title = "MelonBot Help"
@@ -35,7 +35,7 @@ class Info_commands(commands.Cog):
         else:
             for command in self.client.commands: 
                 if command.name == r_command:
-                    embed = discord.Embed(color = ctx.author.colour)
+                    embed = discord.Embed()
                     utils.get_member(ctx, member)
                     utils.create_embed(ctx, embed, member)
 
@@ -60,7 +60,7 @@ class Info_commands(commands.Cog):
         if ctx.author == client.user:
             return
 
-        embed = discord.Embed(color = ctx.author.color)
+        embed = discord.Embed()
         utils.get_member(ctx, member)
         utils.create_embed(ctx, embed, member)
         embed.description = 'Pong! {0}ms'.format(round((client.latency)*1000, 1))
@@ -92,7 +92,7 @@ class Info_commands(commands.Cog):
         url = "https://cdn.discordapp.com/avatars/{0.id}/{0.avatar}.png?size=512".format(member)
         
         utils.get_member(ctx, member)
-        embed = discord.Embed(color = ctx.author.colour)
+        embed = discord.Embed()
         utils.create_embed(ctx, embed, member)
         embed.set_thumbnail(url = url)
         embed.add_field(name = "**ID:**", value = member.id, inline = True)
@@ -102,6 +102,73 @@ class Info_commands(commands.Cog):
         embed.add_field(name = "**Roles:**", value = roleTags, inline = False)
 
         await ctx.send(embed = embed)
+
+    @commands.command(help = "**`$channel <channel>`**",
+        brief = "Shows stats about the specified channel.",
+        usage = "**Usage: `$channel <channel>`**",
+        description = "Shows various information about the channel specified in the `<channel>` argument, leave blank for information of the current channel.\n\nExample: `$channel #bot-commands`"
+    )
+    async def channel(self, ctx, channel : discord.TextChannel = None):
+        utils = self.client.get_cog("Utils")
+
+        member = None
+        embed = discord.Embed()
+        utils.get_member(ctx, member)
+        utils.create_embed(ctx, embed, member)
+
+        if channel is None:
+            channel = ctx.guild.get_channel(ctx.channel.id)
+
+        embed.set_author(name = f"Info for channel: {channel.name}")
+        embed.add_field(name = "**Channel ID:**", value = channel.id, inline = False)
+        embed.add_field(name = "**Channel Description:**", value = channel.topic, inline = False)
+
+        await ctx.send(embed = embed)
+
+    @commands.command(help = "**`$server | roles`**",
+    brief = "Shows stats about the server.",
+    usage = "**Usage: `$server | roles`**",
+    description = "Shows various information about the server, shows roles in the guild if included `roles` flag.\n\nExample: `$guild roles`"
+    )
+    async def server(self, ctx, flag = None):
+        utils = self.client.get_cog("Utils")
+        client = self.client
+
+        member = None
+        embed = discord.Embed()
+        utils.get_member(ctx, member)
+        utils.create_embed(ctx, embed, member)
+
+        guild = client.get_guild(ctx.guild.id)
+
+        if flag is None:
+            embed.set_author(name = "")
+            embed.title = f"Info for guild: **{guild.name}**"
+            embed.add_field(name = "**Channel ID:**", value = guild.id, inline = False)
+            embed.add_field(name = "**Verification Level:**", value = guild.verification_level, inline = False)
+            embed.add_field(name = "**Region:**", value = guild.region, inline = True)
+            embed.add_field(name = "**Shard:**", value = guild.shard_id, inline = True)
+            embed.add_field(name = "**Members:**", value = len(guild.members), inline = True)
+            embed.add_field(name = "**Channels:**", value = len(guild.text_channels), inline = False)
+            embed.add_field(name = "**Voice Channels:**", value = len(guild.voice_channels), inline = False)
+            embed.add_field(name = "**Owner:**", value = guild.owner, inline = True)
+            embed.add_field(name = "**Owner ID:**", value = guild.owner_id, inline = True)
+            embed.add_field(name = "**Created At:**", value = guild.created_at.strftime("%A %d %B %Y at %X%p"), inline = False)
+            embed.set_thumbnail(url = guild.icon_url)
+        else:
+            roles = ""
+            for role in guild.roles:
+                if role.name == "@everyone":
+                    pass
+                else:
+                    roles += (f"<@&{role.id}> ")
+
+            embed.set_author(name = "")
+            embed.title = f"Roles for guild: **{guild.name}**"
+            embed.add_field(name = "**Roles:**", value = roles, inline = False)
+
+        await ctx.send(embed = embed)
+
 
 def setup(client):
     client.add_cog(Info_commands(client))

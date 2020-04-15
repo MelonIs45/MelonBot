@@ -17,7 +17,7 @@ async def restart(ctx):
     try:
       await aiosession.close()
       await ctx.send("Restarting... (Please allow at least 5 seconds)")
-    except:
+    except Exception:
        pass
     subprocess.call([sys.executable, "main.py"])
     await ctx.send("Restarted!")

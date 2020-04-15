@@ -12,7 +12,11 @@ class Owner_commands(commands.Cog):
     def __init__(self, client):
         self.client = client
 
-    @commands.command()
+    @commands.command(help = "**`$status [message]`**",
+    brief = "Changes the bots status.",
+    usage = "**Usage: `$status [message]`**",
+    description = "Changes the bots status message across all servers, `message` argument is required.\n\nExample: `$status lmao get cucked retard`"
+    )
     @commands.is_owner()
     async def status(self, ctx, message):
         client = self.client

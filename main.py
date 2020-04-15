@@ -1,11 +1,27 @@
 import discord
 import os
 import json
-from discord.ext import commands
+import sys
+import aiohttp
+import subprocess
+from discord.ext import commands, tasks
 
 cwd = os.path.dirname(os.path.realpath(__file__))
 config = json.loads(open(cwd + "/config.json", "r").read())
 client = commands.Bot(command_prefix = config["data"]["prefix"],  help_command=None)
+aiosession = aiohttp.ClientSession(loop = client.loop)
+
+@client.command()
+@commands.is_owner()
+async def restart(ctx):
+    try:
+      await aiosession.close()
+      await ctx.send("Restarting... (Please allow at least 5 seconds)")
+    except:
+       pass
+    subprocess.call([sys.executable, "main.py"])
+    await ctx.send("Restarted!")
+    await client.logout()
 
 @client.command()
 async def load(ctx, extension):

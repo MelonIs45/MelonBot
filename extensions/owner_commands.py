@@ -24,6 +24,16 @@ class Owner_commands(commands.Cog):
         status = ctx.message.content.split(" ", 1)[1]
         await client.change_presence(activity = discord.Game(str(status)))
         await ctx.send(f"Changed status to **`{status}`**.")
+    
+    @commands.command()
+    @commands.is_owner()
+    async def delete(self, ctx):
+        count = 0
+        filelist = [f for f in os.listdir("./colors") if f.endswith(".jpg")]
+        for f in filelist:
+            os.remove(os.path.join("./colors", f))
+            count += 1
+        await ctx.send(f"Deleted {count} images.")
 
 def setup(client):
     client.add_cog(Owner_commands(client))

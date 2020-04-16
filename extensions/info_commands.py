@@ -149,7 +149,7 @@ class Info_commands(commands.Cog):
             embed.add_field(name = "**Region:**", value = guild.region, inline = True)
             embed.add_field(name = "**Shard:**", value = guild.shard_id, inline = True)
             embed.add_field(name = "**Members:**", value = len(guild.members), inline = True)
-            embed.add_field(name = "**Channels:**", value = len(guild.text_channels), inline = False)
+            embed.add_field(name = "**Text Channels:**", value = len(guild.text_channels), inline = False)
             embed.add_field(name = "**Voice Channels:**", value = len(guild.voice_channels), inline = False)
             embed.add_field(name = "**Owner:**", value = guild.owner, inline = True)
             embed.add_field(name = "**Owner ID:**", value = guild.owner_id, inline = True)
@@ -164,7 +164,7 @@ class Info_commands(commands.Cog):
                     roles += (f"<@&{role.id}> ")
 
             embed.set_author(name = "")
-            embed.title = f"Roles for guild: **{guild.name}**"
+            embed.title = f"Roles for server: **{guild.name}**"
             embed.add_field(name = "**Roles:**", value = roles, inline = False)
 
         await ctx.send(embed = embed)

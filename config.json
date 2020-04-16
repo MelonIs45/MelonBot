@@ -1,11 +1,9 @@
 {
-    "data": {
-      "token": "token here",
-      "prefix": "$"
-    },
-    "log": {
-      "logGuild": "guild id to log from",
-      "guildId": "guild id to log to",
-      "channelId": "channel id to log to"
-    }
+  "data": {
+    "prefix": "$"
+  },
+  "log": {
+    "logGuild": "657281286905266247",
+    "channelId": "698840375623811112"
+  }
 }

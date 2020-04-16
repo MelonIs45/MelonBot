@@ -54,4 +54,6 @@ def unloadall():
             print(f"Unloaded {filename}")
 
 loadall()
-client.run(config["data"]["token"])
+with open("token.txt", "r") as file:
+    token = file.readline()
+client.run(token)

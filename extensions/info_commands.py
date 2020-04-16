@@ -169,6 +169,23 @@ class Info_commands(commands.Cog):
 
         await ctx.send(embed = embed)
 
+    @commands.command(help = "**`$invite`**",
+    brief = "Sends an invite link for the bot.",
+    usage = "**Usage: `$invite`**",
+    description = "Sends an invite link for the bot which can be used to add the bot to a server, no arguments are to be given.\n\nExample: `$invite`"
+    )
+    async def invite(self, ctx):
+        utils = self.client.get_cog("Utils")
+        client = self.client
+        member = None
+        embed = discord.Embed()
+        utils.get_member(ctx, member)
+        utils.create_embed(ctx, embed, member)
+
+        embed.set_author(name = f"Invite link for: {client.user.name}")
+        embed.description = "https://discordapp.com/api/oauth2/authorize?client_id=560526844705636374&permissions=27648&scope=bot"
+
+        await ctx.send(embed = embed)
 
 def setup(client):
     client.add_cog(Info_commands(client))

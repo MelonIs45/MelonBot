@@ -89,13 +89,11 @@ class Fun_commands(commands.Cog):
         utils.get_member(ctx, member)
         utils.create_embed(ctx, embed, member)
 
-        if "," in code:
-            await ctx.send("That isnt a valid color, try without commas.")
-            return
-        elif " " in code:
-            code = code.split(" ")
+        if code.startswith("rgb") or " " in code:
+            code = code.lstrip("rgb(").rstrip(")").replace(",", " ").split(" ")
+            code = list(filter(None, code))
             code = f"{code[0]}, {code[1]}, {code[2]}"
-            rgb = tuple(map(int, code.split(', '))) 
+            rgb = tuple(map(int, code.split(', ')))  
         else:
             if not code.startswith("#"):
                 code = f"#{code}"

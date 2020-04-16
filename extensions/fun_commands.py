@@ -128,9 +128,9 @@ class Fun_commands(commands.Cog):
         embed.set_author(name = f"Colour Information: {color_name}")
         embed.add_field(name = "Hex Value:", value = str(webcolors.rgb_to_hex(rgb)), inline = False)
         embed.add_field(name = "RGB Value:", value = f"rgb{str(rgb)}", inline = False)
-        embed.add_field(name = "HSV Value:", value = str(hsv), inline = False)
-        embed.add_field(name = "HLS Value:", value = str(hls), inline = False)
-        embed.add_field(name = "CMYK Value:", value = cmyk, inline = False)
+        embed.add_field(name = "HSV Value:", value = f"hsv{str(hsv)}", inline = False)
+        embed.add_field(name = "HLS Value:", value = f"hls{str(hls)}", inline = False)
+        embed.add_field(name = "CMYK Value:", value = f"cmyk{str(cmyk)}", inline = False)
         embed.add_field(name = "Integer Value:", value = rgb_int, inline = False)
         
         await ctx.send(embed = embed)

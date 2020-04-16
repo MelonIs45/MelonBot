@@ -19,16 +19,19 @@ async def restart(ctx):
     os.execl(python, python, * sys.argv)
 
 @client.command()
+@commands.is_owner()
 async def load(ctx, extension):
     client.load_extension(f"extensions.{extension}")
     await ctx.send(f"Extension: `{extension}` loaded!")
 
 @client.command()
+@commands.is_owner()
 async def unload(ctx, extension):
     client.unload_extension(f"extensions.{extension}")
     await ctx.send(f"Extension: `{extension}` unloaded!")
     
 @client.command()
+@commands.is_owner()
 async def reload(ctx, extension):
     if ctx.message.content.split(" ")[1] == "all":
         unloadall()

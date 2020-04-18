@@ -60,7 +60,6 @@ class Fun_commands(commands.Cog):
         client = self.client
         if ctx.author == client.user:
             return
-
         memberList = []
         for member in ctx.guild.members:
             if member.bot is True:

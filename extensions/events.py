@@ -2,7 +2,8 @@ import discord
 import os
 import json
 import datetime
-from discord.ext import commands
+import sys
+from discord.ext import commands, tasks
 
 cwd = os.path.dirname(__file__)
 jsonPath = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'config.json')
@@ -16,6 +17,8 @@ class Events(commands.Cog):
     async def on_ready(self):
         client = self.client
         print(f"-----------\nBot made by MelonIs45#8078\nLogged in as: {client.user.name}\nReady!")
+        tasks = client.get_cog("Tasks")
+        await tasks.auto_restart()
 
     @commands.Cog.listener()
     async def on_message(self, message):

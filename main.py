@@ -11,13 +11,14 @@ config = json.loads(open(cwd + "/config.json", "r").read())
 client = commands.Bot(command_prefix = config["data"]["prefix"],  help_command=None)
 aiosession = aiohttp.ClientSession(loop = client.loop)
 
+
 @client.command()
 @commands.is_owner()
 async def restart(ctx):
     await ctx.send("Restarting... (Please allow at least 5 seconds.)")
     python = sys.executable
     os.execl(python, python, * sys.argv)
-
+    
 @client.command()
 @commands.is_owner()
 async def load(ctx, extension):
@@ -54,6 +55,8 @@ def unloadall():
             print(f"Unloaded {filename}")
 
 loadall()
+
+
 with open("token.txt", "r") as file:
     token = file.readline()
 client.run(token)

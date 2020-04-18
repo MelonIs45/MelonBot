@@ -2,7 +2,8 @@ import discord
 import os
 import json
 import datetime
-from discord.ext import commands
+import sys
+from discord.ext import commands, tasks
 
 cwd = os.path.dirname(__file__)
 jsonPath = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "config.json")
@@ -30,6 +31,16 @@ class Owner_commands(commands.Cog):
             os.remove(os.path.join("./colors", f))
             count += 1
         await ctx.send(f"Deleted {count} images.")
+
+    @commands.command()
+    @commands.is_owner()
+    async def send(self, ctx, message):
+        client = self.client
+        guild = client.get_guild(ctx.guild.id)
+        message = ctx.message.content.split(" ", 1)[1]
+        for channel in guild.text_channels:
+            channel = client.get_channel(channel.id)
+            await channel.send(message)
 
 def setup(client):
     client.add_cog(Owner_commands(client))
